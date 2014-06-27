@@ -1,0 +1,8 @@
+{
+    "name": "zack/fluentdbal",
+    "autoload": {
+        "psr-0" : {
+            "Zack\\FluentDBAL" : "Source Files"
+        }
+    }
+}
