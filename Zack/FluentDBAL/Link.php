@@ -33,17 +33,8 @@ class Link {
     const OR_GLUE = 2;
     const AND_GLUE = 3;
 
-    function __construct($glue) {
-        switch ($glue) {
-            case OR_GLUE:
-                $this->glue = "OR";
-                break;
-            case AND_GLUE:
-                $this->glue = "AND";
-                break;
-            default:
-                $this->glue = "";
-        }
+    function __construct() {
+        $this->next = new Predicate();
     }
 
     public function getGlue() {
@@ -55,7 +46,16 @@ class Link {
     }
 
     public function setGlue($glue) {
-        $this->glue = $glue;
+        switch ($glue) {
+            case self::OR_GLUE:
+                $this->glue = "OR";
+                break;
+            case self::AND_GLUE:
+                $this->glue = "AND";
+                break;
+            default:
+                $this->glue = "";
+        }
     }
 
     public function setNext(\Predicate $next) {

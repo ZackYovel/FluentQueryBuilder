@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-
 class WhereBuilder {
 
     /**
@@ -39,22 +38,20 @@ class WhereBuilder {
     /**
      * 
      * @param type $param
-     * @param int $type - one of the PDO::PARAM_<TYPE> flags
      * @return \WhereBuilder
      */
-    public function param($param, $type) {
-        $this->tail->setParam($param, $type);
+    public function param($param) {
+        $this->tail->setParam($param);
         return $this;
     }
 
     /**
      * 
      * @param type $value
-     * @param int $type - one of the PDO::PARAM_<TYPE> flags
      * @return \WhereBuilder
      */
-    public function value($value, $type) {
-        $this->tail->setValue($value, $type);
+    public function value($value) {
+        $this->tail->setValue($value);
         return $this;
     }
 
@@ -65,6 +62,18 @@ class WhereBuilder {
      */
     public function column($colunm) {
         $this->tail->setColumns($colunm);
+        return $this;
+    }
+
+    public function equalsValue($value) {
+        $this->equals();
+        $this->value($value);
+        return $this;
+    }
+
+    public function equalsParam($param) {
+        $this->equals();
+        $this->param($param);
         return $this;
     }
 
@@ -109,18 +118,18 @@ class WhereBuilder {
      * @param int $glue
      */
     private function appendLink($glue) {
-        $link = $this->tail->getLink();
+        $link = new Link();
         $link->setGlue($glue);
-        $next = new Predicate();
-        $link->setNext($next);
-        $this->tail = $next;
+        $this->tail->setLink($link);
+        $this->tail = $link->getNext();
     }
 
     public function __toString() {
         return " $this->head";
     }
-    
-    public function bindInput(PDOStatement $statement){
+
+    public function bindToStatement(PDOStatement $statement) {
         $this->head->bindInput($statement);
     }
+
 }

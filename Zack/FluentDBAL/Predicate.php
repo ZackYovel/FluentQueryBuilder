@@ -53,7 +53,7 @@ class Predicate {
      * @var int
      */
     private $inputType;
-    
+
     /**
      *
      * @var string
@@ -65,10 +65,6 @@ class Predicate {
      * @var \Link
      */
     private $link;
-
-    function __construct() {
-        $this->link = new Link("");
-    }
 
     public function getTables() {
         return $this->tables;
@@ -98,19 +94,34 @@ class Predicate {
         $this->operator = $operator;
     }
 
-    public function setValue($value, $type) {
-        $this->setInput($value, $type, self::CATEGORY_VALUE);
+    public function setValue($value) {
+        $this->setInput($value, self::CATEGORY_VALUE);
     }
 
-    public function setParam($param, $type) {
-        $this->setInput($param, $type, self::CATEGORY_PARAM);
+    public function setParam($param) {
+        $this->setInput($param, self::CATEGORY_PARAM);
     }
 
-    private function setInput($input, $type, $category) {
+    private function setInput($input, $category) {
+        $type = $this->getType($input);
         $this->input = $input;
         $this->inputType = $type;
         $this->inputCategory = $category;
         $this->parameter = ":" . ($this->inputCategory === Predicate::CATEGORY_PARAM ? "param" : "value") . ++self::$count;
+    }
+
+    private function getType($input) {
+        switch (gettype($input)) {
+            case 'string':
+                $type = PDO::PARAM_STR;
+                break;
+            case 'int':
+                $type = PDO::PARAM_INT;
+                break;
+            default:
+                $type = PDO::PARAM_NULL;
+        }
+        return $type;
     }
 
     public function setLink(\Link $link) {
@@ -118,15 +129,20 @@ class Predicate {
     }
 
     public function __toString() {
-        return " $this->tables $this->operator $this->parameter $this->link";
+        $sql = " $this->tables $this->operator $this->parameter";
+        $sql .= $this->link ? " $this->link" : "";
+        return $sql;
     }
-    
-    public function bindInput(PDOStatement $statement){
-        if ($this->inputCategory === self::CATEGORY_PARAM){
-            $statement->bindParam($statement, $this->input, $this->inputType);
-        }else{
-            $statement->bindValue($statement, $this->input, $this->inputType);
+
+    public function bindInput(PDOStatement $statement) {
+        if ($this->inputCategory === self::CATEGORY_PARAM) {
+            $statement->bindParam($this->parameter, $this->input, $this->inputType);
+        } else {
+            $statement->bindValue($this->parameter, $this->input, $this->inputType);
         }
-        $this->link->bindNext($statement);
+        if ($this->link) {
+            $this->link->bindNext($statement);
+        }
     }
+
 }
