@@ -22,9 +22,6 @@ class QueryBuilder {
     private $selection;
     private $tables;
     private $where;
-//    private $identifier = 1;
-//    private $values = array();
-//    private $params = array();
 
     /**
      *
@@ -70,26 +67,6 @@ class QueryBuilder {
         return $this;
     }
 
-//    private function putValue($value, $type) {
-//        $id = $this->getId();
-//        $this->query .= " $id";
-//        $this->values[$id] = array(
-//            'value' => $value,
-//            'type' => $type
-//        );
-//        return $this;
-//    }
-//
-//    private function putParam($param, $type) {
-//        $id = $this->getId();
-//        $this->query .= " $id";
-//        $this->params[$id] = array(
-//            'param' => $param,
-//            'type' => $type
-//        );
-//        return $this;
-//    }
-
     /**
      * Appends the origin table.
      * This does not get prepared,
@@ -107,21 +84,11 @@ class QueryBuilder {
         return $this;
     }
 
-//    private function getId() {
-//        return ":qurey" . $this->identifier++;
-//    }
-
     public function send() {
         $pdo = $this->getConnection($this->dbInfo[0], $this->dbInfo[1], $this->dbInfo[2], $this->dbInfo[3]);
         try {
             $sqlString = $this->getSqlString();
             $pdoStatement = $pdo->prepare($sqlString);
-//            foreach ($this->params as $id => $param) {
-//                $pdoStatement->bindParam($id, $param['param'], $param['type']);
-//            }
-//            foreach ($this->values as $id => $value) {
-//                $pdoStatement->bindValue($id, $value['value'], $value['type']);
-//            }
             $this->where->bindToStatement($pdoStatement);
             $pdoStatement->execute();
             return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
@@ -150,5 +117,4 @@ class QueryBuilder {
             die();
         }
     }
-
 }
