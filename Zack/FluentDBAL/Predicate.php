@@ -1,6 +1,5 @@
 <?php
 
-namespace Zack\FluentDBAL;
 
 /*
  * Copyright 2014 Yehezkel (Zack) Yovel
@@ -23,50 +22,50 @@ class Predicate {
     const CATEGORY_VALUE = 2;
     const CATEGORY_PARAM = 3;
 
-    private static $count = 0;
+    protected static $count = 0;
 
     /**
      *
      * @var string
      */
-    private $tables;
+    protected $tables;
 
     /**
      *
      * @var string
      */
-    private $operator;
+    protected $operator;
 
     /**
      *
      * @var mixed
      */
-    private $input;
+    protected $input;
 
     /**
      *
      * @var int
      */
-    private $inputCategory;
+    protected $inputCategory;
 
     /**
      * PDO::PARAM_<TYPE> flag.
      * e.g. PDO::PARAM_INT, PDO::PARAM_STR
      * @var int
      */
-    private $inputType;
+    protected $inputType;
 
     /**
      *
      * @var string
      */
-    private $parameter;
+    protected $parameter;
 
     /**
      *
      * @var \Link
      */
-    private $link;
+    protected $link;
 
     public function getTables() {
         return $this->tables;
@@ -104,7 +103,7 @@ class Predicate {
         $this->setInput($param, self::CATEGORY_PARAM);
     }
 
-    private function setInput($input, $category) {
+    protected function setInput($input, $category) {
         $type = $this->getType($input);
         $this->input = $input;
         $this->inputType = $type;
@@ -112,7 +111,7 @@ class Predicate {
         $this->parameter = ":" . ($this->inputCategory === Predicate::CATEGORY_PARAM ? "param" : "value") . ++self::$count;
     }
 
-    private function getType($input) {
+    protected function getType($input) {
         switch (gettype($input)) {
             case 'string':
                 $type = PDO::PARAM_STR;

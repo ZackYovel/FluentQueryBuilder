@@ -1,6 +1,5 @@
 <?php
 
-namespace Zack\FluentDBAL;
 
 /*
  * Copyright 2014 Yehezkel (Zack) Yovel
@@ -18,11 +17,11 @@ namespace Zack\FluentDBAL;
  * limitations under the License.
  */
 
-class QueryBuilder {
+class SelectBuilder {
 
-    private $crud;
+//    private $crud;
     private $selection;
-    private $tables;
+    private $origin;
     private $where;
 
     /**
@@ -35,7 +34,7 @@ class QueryBuilder {
      *      'pass' => ?
      * )
      */
-    private $dbInfo;
+//    private $dbInfo;
 
     /**
      * @param string $host
@@ -43,30 +42,9 @@ class QueryBuilder {
      * @param string $user
      * @param string $pass
      */
-    function __construct() {
-        $this->dbInfo = func_get_args();
-    }
-
-    public function insert($selection) {
-        return $this->initQuery("INSERT INTO", $selection);
-    }
-
-    public function select($selection) {
-        return $this->initQuery("SELECT", $selection);
-    }
-
-    public function alter($selection) {
-        return $this->initQuery("ALTER", $selection);
-    }
-
-    public function delete($selection) {
-        return $this->initQuery("DELETE", $selection);
-    }
-
-    private function initQuery($crud, $selection) {
-        $this->crud = $crud;
+    function __construct($selection) {
+//        $this->dbInfo = func_get_args();
         $this->selection = $selection;
-        return $this;
     }
 
     /**
@@ -77,7 +55,7 @@ class QueryBuilder {
      * @return \QueryBuilder
      */
     public function from($origin) {
-        $this->tables = $origin;
+        $this->origin = $origin;
         return $this;
     }
 
@@ -86,8 +64,8 @@ class QueryBuilder {
         return $this;
     }
 
-    public function send() {
-        $pdo = $this->getConnection($this->dbInfo[0], $this->dbInfo[1], $this->dbInfo[2], $this->dbInfo[3]);
+    public function send($host, $dbname, $user, $password, $encoding = "'utf8'") {
+        $pdo = $this->getConnection($host, $dbname, $user, $password, $encoding);
         try {
             $sqlString = $this->getSqlString();
             $pdoStatement = $pdo->prepare($sqlString);
@@ -101,7 +79,7 @@ class QueryBuilder {
     }
 
     private function getSqlString() {
-        $result = "$this->crud $this->selection FROM $this->tables";
+        $result = "SELECT $this->selection FROM $this->origin";
         if ($this->where) {
             $result .= " WHERE $this->where";
         }
@@ -119,4 +97,5 @@ class QueryBuilder {
             die();
         }
     }
+
 }

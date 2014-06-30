@@ -1,7 +1,5 @@
 <?php
 
-namespace Zack\FluentDBAL;
-
 /*
  * Copyright 2014 Yehezkel (Zack) Yovel
  *
@@ -24,19 +22,22 @@ class Link {
      *
      * @var string
      */
-    private $glue;
+    protected $glue;
 
     /**
      *
      * @var \Predicate
      */
-    private $next;
+    protected $next;
 
     const OR_GLUE = 2;
     const AND_GLUE = 3;
 
-    function __construct() {
-        $this->next = new Predicate();
+    function __construct($next = NULL) {
+        if ($next === NULL) {
+            $next = new Predicate();
+        }
+        $this->next = $next;
     }
 
     public function getGlue() {

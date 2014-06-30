@@ -1,6 +1,5 @@
 <?php
 
-namespace Zack\FluentDBAL;
 
 /*
  * Copyright 2014 Yehezkel (Zack) Yovel

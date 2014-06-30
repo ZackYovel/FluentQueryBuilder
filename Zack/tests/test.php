@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-include '../FluentDBAL/QueryBuilder.php';
+include '../FluentDBAL/QueryFactory.php';
+include '../FluentDBAL/SelectBuilder.php';
 include '../FluentDBAL/WhereBuilder.php';
 include '../FluentDBAL/Predicate.php';
 include '../FluentDBAL/Link.php';
@@ -28,8 +29,8 @@ echo '<pre>';
 
 // Baisic test for the QueryBuilder working with a WhereBuilder with two
 // predicates bound by "OR".
-$query = new QueryBuilder('localhost', 'test', 'root', '');
-$query->select('*')
+
+$query = QueryFactory::select('*')
         ->from('persons')
         ->where((new WhereBuilder())
                 ->column('id')
@@ -38,7 +39,7 @@ $query->select('*')
                 ->column('name')
                 ->equalsValue('John Doe')
 );
-$result = $query->send();
+$result = $query->send('localhost', 'test', 'root', '');
 var_dump($result);
 
 
