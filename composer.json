@@ -2,7 +2,7 @@
     "name": "zack/fluentdbal",
     "autoload": {
         "psr-4" : {
-            "Zack\\FluentDBAL\\" : "Fluent-DBAL/Zack/FluentDBAL/"
+            "Zack\\FluentDBAL\\" : "FluentDBAL/Zack/FluentDBAL/"
         }
     }
 }
