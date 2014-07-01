@@ -21,9 +21,4 @@ class SetPredicate extends Predicate {
     function __construct() {
         $this->operator = '=';
     }
-
-    public function setLink() {
-        $this->link = new SetLink();
-    }
-
 }
