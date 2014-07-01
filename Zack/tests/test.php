@@ -32,7 +32,7 @@ echo '<pre>';
 
 $query = QueryFactory::select('*')
         ->from('persons')
-        ->where((new WhereBuilder()
+        ->where((new WhereBuilder())
                 ->column('id')
                 ->equalsValue(2)
                 ->appendOr()
