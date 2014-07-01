@@ -69,5 +69,17 @@ class UpdateBuilder {
         $this->tail = $link->getNext();
         return $this->set($column);
     }
+    
+    private function getSqlString(){
+        $result = "UPDATE $this->selection";
+        if($this->where){
+           $result .= " WHERE $this->where"; 
+        }
+        $result .= " SET $this->setHead;";
+    }
+    
+    private function bindComponents(PDOStatement $pdoStatement){
+
+    }
 
 }
