@@ -126,7 +126,7 @@ class WhereBuilder {
     }
 
     public function __toString() {
-        return " $this->head";
+        return " WHERE $this->head";
     }
 
     public function bindToStatement(PDOStatement $statement) {

@@ -19,27 +19,45 @@
  */
 
 include '../FluentDBAL/QueryFactory.php';
+include '../FluentDBAL/AbstractQuery.php';
 include '../FluentDBAL/SelectBuilder.php';
+include '../FluentDBAL/UpdateBuilder.php';
 include '../FluentDBAL/WhereBuilder.php';
 include '../FluentDBAL/Predicate.php';
 include '../FluentDBAL/Link.php';
+include '../FluentDBAL/SetPredicate.php';
+include '../FluentDBAL/SetLink.php';
 
 echo '<pre>';
-
 
 // Baisic test for the QueryBuilder working with a WhereBuilder with two
 // predicates bound by "OR".
 
-$query = QueryFactory::select('*')
-        ->from('persons')
+
+
+function f() {
+    $query = QueryFactory::select('*')
+            ->from('persons')
+            ->where((new WhereBuilder())
+            ->column('id')
+            ->equalsValue(2)
+            ->appendOr()
+            ->column('name')
+            ->equalsValue('John Doe')
+    );
+    $result = $query->send('localhost', 'test', 'root', '');
+    var_dump($result);
+}
+
+//f();
+
+$query = QueryFactory::update('persons')
+        ->set('name')
+        ->toValue('Name is missing')
         ->where((new WhereBuilder())
-                ->column('id')
-                ->equalsValue(2)
-                ->appendOr()
-                ->column('name')
-                ->equalsValue('John Doe')
+        ->column('name')
+        ->equalsValue('')
 );
-$result = $query->send('localhost', 'test', 'root', '');
-var_dump($result);
+var_dump($query->send('localhost', 'test', 'root', ''));
 
-
+//f();

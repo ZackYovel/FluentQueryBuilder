@@ -77,10 +77,10 @@ class SelectBuilder extends AbstractQuery {
         
     }
 
-    private function getSqlString() {
+    function getSqlString() {
         $result = "SELECT $this->selection FROM $this->origin";
         if ($this->where) {
-            $result .= " WHERE $this->where";
+            $result .= $this->where;
         }
         if(isset($this->offset)){
             $result .= " LIMIT $this->offset, $this->length";
@@ -90,9 +90,14 @@ class SelectBuilder extends AbstractQuery {
         return $result;
     }
     
-    private function bindComponents(PDOStatement $pdoStatements){
+    function bindComponents(PDOStatement $pdoStatements){
         if($this->where){
-            $this->where->bindToStatement($pdoStatement);
+            $this->where->bindToStatement($pdoStatements);
         }
     }
+    
+    public function send($host, $dbname, $user, $password, $encoding = "'utf8'") {
+        return parent::send($host, $dbname, $user, $password, $encoding)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

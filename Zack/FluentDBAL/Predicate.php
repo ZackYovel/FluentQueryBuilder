@@ -130,7 +130,7 @@ class Predicate {
     }
 
     public function __toString() {
-        $sql = " $this->tables $this->operator $this->parameter";
+        $sql = "$this->tables $this->operator $this->parameter";
         $sql .= $this->link ? " $this->link" : "";
         return $sql;
     }

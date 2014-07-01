@@ -22,9 +22,9 @@ class QueryFactory {
         return new SelectBuilder($selection);
     }
 
-//    public static function update($selection){
-//        return new \Zack\FluentDBAL\SelectBuilder($selection);
-//    }
+    public static function update($selection){
+        return new UpdateBuilder($selection);
+    }
 //    
 //    public static function insert($selection){
 //        return new \Zack\FluentDBAL\SelectBuilder($selection);

@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-abstract class AbstractQuery{
-      
+abstract class AbstractQuery {
+
     private function getConnection($host, $dbname, $user, $password, $encoding = "'utf8'") {
         try {
             $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
@@ -29,10 +29,11 @@ abstract class AbstractQuery{
             die();
         }
     }
-    
-    abstract private function getSqlString();
-    abstract private function bindComponents(PDOStatement $pdoStatement);
-    
+
+    abstract function getSqlString();
+
+    abstract function bindComponents(PDOStatement $pdoStatement);
+
     public function send($host, $dbname, $user, $password, $encoding = "'utf8'") {
         $pdo = $this->getConnection($host, $dbname, $user, $password, $encoding);
         try {
@@ -40,7 +41,7 @@ abstract class AbstractQuery{
             $pdoStatement = $pdo->prepare($sqlString);
             $this->bindComponents($pdoStatement);
             $pdoStatement->execute();
-            return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+            return $pdoStatement;
         } catch (Exception $ex) {
             print "Error!: " . $ex->getMessage() . "<br/>";
             exit($ex->getCode());

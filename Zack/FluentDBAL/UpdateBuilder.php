@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-class UpdateBuilder {
+class UpdateBuilder extends AbstractQuery {
 
     private $selection;
 //    private $origin;
@@ -70,17 +70,19 @@ class UpdateBuilder {
         $this->setTail = $link->getNext();
         return $this->set($column);
     }
-    
-    private function getSqlString(){
+
+    function getSqlString() {
         $result = "UPDATE $this->selection";
-        if($this->where){
-           $result .= " WHERE $this->where"; 
+        $result .= " SET $this->setHead";
+        if ($this->where) {
+            $result .= $this->where;
         }
-        $result .= " SET $this->setHead;";
+        return $result . ";";
     }
-    
-    private function bindComponents(PDOStatement $pdoStatement){
-        if($this->where){
+
+    function bindComponents(PDOStatement $pdoStatement) {
+        $this->setHead->bindInput($pdoStatement);
+        if ($this->where) {
             $this->where->bindToStatement($pdoStatement);
         }
     }
