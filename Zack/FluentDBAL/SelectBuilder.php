@@ -23,6 +23,8 @@ class SelectBuilder {
     private $selection;
     private $origin;
     private $where;
+    private $offset;
+    private $length;
 
     /**
      *
@@ -63,6 +65,17 @@ class SelectBuilder {
         $this->where = $where;
         return $this;
     }
+    
+    public function limit(){
+        $args = func_get_args();
+        if(sizeof($args>1)){
+            $this->offset = $args[0];
+            $this->length = $args[1];
+        }else{
+            $this->length = $args[0];
+        }
+        
+    }
 
     public function send($host, $dbname, $user, $password, $encoding = "'utf8'") {
         $pdo = $this->getConnection($host, $dbname, $user, $password, $encoding);
@@ -82,6 +95,11 @@ class SelectBuilder {
         $result = "SELECT $this->selection FROM $this->origin";
         if ($this->where) {
             $result .= " WHERE $this->where";
+        }
+        if(isset($this->offset)){
+            $result .= " LIMIT $this->offset, $this->length";
+        }else if(isset($this->length)){
+            $result .= " LIMIT $this->length";
         }
         return $result;
     }
