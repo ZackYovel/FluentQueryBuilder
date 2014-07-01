@@ -79,7 +79,9 @@ class UpdateBuilder {
     }
     
     private function bindComponents(PDOStatement $pdoStatement){
-
+        if($this->where){
+            $this->where->bindToStatement($pdoStatement);
+        }
     }
 
 }
