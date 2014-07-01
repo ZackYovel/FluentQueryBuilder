@@ -20,7 +20,7 @@ class SetLink extends Link {
 
     function __construct() {
         parent::__construct(new SetPredicate());
-        $this->setGlue('AND');
+        $this->setGlue(self::LINK_AND);
     }
 
 }
