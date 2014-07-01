@@ -77,20 +77,6 @@ class SelectBuilder extends AbstractQuery {
         
     }
 
-    public function send($host, $dbname, $user, $password, $encoding = "'utf8'") {
-        $pdo = $this->getConnection($host, $dbname, $user, $password, $encoding);
-        try {
-            $sqlString = $this->getSqlString();
-            $pdoStatement = $pdo->prepare($sqlString);
-            $this->where->bindToStatement($pdoStatement);
-            $pdoStatement->execute();
-            return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $ex) {
-            print "Error!: " . $ex->getMessage() . "<br/>";
-            exit($ex->getCode());
-        }
-    }
-
     private function getSqlString() {
         $result = "SELECT $this->selection FROM $this->origin";
         if ($this->where) {
