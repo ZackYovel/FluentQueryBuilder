@@ -91,6 +91,8 @@ class SelectBuilder extends AbstractQuery {
     }
     
     private function bindComponents(PDOStatement $pdoStatements){
-        $this->where->bindToStatement($pdoStatement);
+        if($this->where){
+            $this->where->bindToStatement($pdoStatement);
+        }
     }
 }
