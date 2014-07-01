@@ -65,8 +65,9 @@ class UpdateBuilder {
     }
 
     public function andSet($column) {
-        $link = $this->setTail->getLink();
-        $this->tail = $link->getNext();
+        $link = new SetLink();
+        $this->setTail->setLink($link);
+        $this->setTail = $link->getNext();
         return $this->set($column);
     }
     
