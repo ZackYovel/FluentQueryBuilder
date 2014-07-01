@@ -89,4 +89,8 @@ class SelectBuilder extends AbstractQuery {
         }
         return $result;
     }
+    
+    private function bindComponents(PDOStatement $pdoStatements){
+        $this->where->bindToStatement($pdoStatement);
+    }
 }
