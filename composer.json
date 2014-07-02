@@ -1,8 +1,0 @@
-{
-    "name": "zack/fluentdbal",
-    "autoload": {
-        "psr-4" : {
-            "Zack\\FluentDBAL\\" : "FluentDBAL/Zack/FluentDBAL"
-        }
-    }
-}
